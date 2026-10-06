@@ -72,7 +72,7 @@ form.addEventListener("submit", async (event) => {
 	}
 
 	
-	let eww = "wss://wisp.mercurywork.shop/";
+	let eww = "wss://zakaon.top/api/";
 	try {
 		await connection.setTransport("/l1bc.mjs", [
 			{ websocket: eww },
