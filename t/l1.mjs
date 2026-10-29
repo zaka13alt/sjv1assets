@@ -5,8 +5,8 @@ var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
 
-// node_modules/.pnpm/libcurl.js@0.7.4/node_modules/libcurl.js/libcurl_full.mjs
-var libcurl = function() {
+// node_modules/.pnpm/libby.js@0.7.4/node_modules/libby.js/libby_full.mjs
+var libby = function() {
   var Module = typeof Module != "undefined" ? Module : {};
   var moduleOverrides = Object.assign({}, Module);
   var arguments_ = [];
@@ -5568,10 +5568,10 @@ var libcurl = function() {
     510: "Not Extended",
     511: "Network Authentication Required"
   };
-  const copyright_notice = `libcurl.js is licensed under the GNU LGPL v3. You can find the license text and source code at the project's git repository: https://github.com/ading2210/libcurl.js
+  const copyright_notice = `libby.js is licensed under the GNU LGPL v3. You can find the license text and source code at the project's git repository: https://github.com/ading2210/libby.js
 
 Several C libraries are used, and their licenses are listed below:
-- libcurl: curl License (https://curl.se/docs/copyright.html)
+- libby: curl License (https://curl.se/docs/copyright.html)
 - mbedtls: Apache License 2.0 (https://github.com/Mbed-TLS/mbedtls/blob/development/LICENSE)
 - cjson: MIT License (https://github.com/DaveGamble/cJSON/blob/master/LICENSE)
 - zlib: zlib License (https://www.zlib.net/zlib_license.html)
@@ -5671,8 +5671,8 @@ Several C libraries are used, and their licenses are listed below:
       }, 0);
     }
     event_loop_func() {
-      let libcurl_active = _session_get_active(this.session_ptr);
-      if (libcurl_active || this.active_requests) {
+      let libby_active = _session_get_active(this.session_ptr);
+      if (libby_active || this.active_requests) {
         _session_perform(this.session_ptr);
       } else {
         clearInterval(this.event_loop);
@@ -5970,7 +5970,7 @@ Several C libraries are used, and their licenses are listed below:
         request_options.headers["Sec-Websocket-Protocol"] = this.protocols.join(", ");
       }
       if (this.options.verbose) {
-        request_options._libcurl_verbose = 1;
+        request_options._libby_verbose = 1;
       }
       this.http_handle = this.create_request(this.url, data_callback, finish_callback, headers_callback);
       c_func(_http_set_options, [this.http_handle, JSON.stringify(request_options), null, 0]);
@@ -6235,14 +6235,14 @@ Several C libraries are used, and their licenses are listed below:
   var version_dict = null;
   var api = null;
   var main_session = null;
-  const libcurl_version = "0.7.4";
+  const libby_version = "0.7.4";
   const wisp_version = "1.1.1";
   function check_loaded(check_websocket) {
     if (!wasm_ready) {
-      throw new Error("wasm not loaded yet, please call libcurl.load_wasm first");
+      throw new Error("wasm not loaded yet, please call libby.load_wasm first");
     }
     if (!websocket_url && check_websocket) {
-      throw new Error("websocket proxy url not set, please call libcurl.set_websocket");
+      throw new Error("websocket proxy url not set, please call libby.set_websocket");
     }
   }
   function set_websocket_url(url) {
@@ -6263,7 +6263,7 @@ Several C libraries are used, and their licenses are listed below:
     let version_str = UTF8ToString(version_ptr);
     _free(version_ptr);
     version_dict = JSON.parse(version_str);
-    version_dict.lib = libcurl_version;
+    version_dict.lib = libby_version;
     version_dict.wisp = wisp_version;
     return version_dict;
   }
@@ -6280,7 +6280,7 @@ Several C libraries are used, and their licenses are listed below:
     if (!main_session && websocket_url) {
       setup_main_session();
     }
-    let load_event = new Event("libcurl_load");
+    let load_event = new Event("libby_load");
     api.events.dispatchEvent(load_event);
     api.onload();
     if (ENVIRONMENT_IS_WEB) {
@@ -6288,7 +6288,7 @@ Several C libraries are used, and their licenses are listed below:
     }
   }
   function abort_callback(reason) {
-    let abort_event = new CustomEvent("libcurl_abort", { detail: reason });
+    let abort_event = new CustomEvent("libby_abort", { detail: reason });
     api.events.dispatchEvent(abort_event);
     if (ENVIRONMENT_IS_WEB) {
       document.dispatchEvent(abort_event);
@@ -6303,10 +6303,10 @@ Several C libraries are used, and their licenses are listed below:
     }
     return new Promise((resolve, reject) => {
       if (wasm_ready) return resolve();
-      api.events.addEventListener("libcurl_load", () => {
+      api.events.addEventListener("libby_load", () => {
         resolve();
       }, { once: true });
-      api.events.addEventListener("libcurl_abort", (event) => {
+      api.events.addEventListener("libby_abort", (event) => {
         reject(event.detail);
       }, { once: true });
     });
@@ -6370,7 +6370,7 @@ Several C libraries are used, and their licenses are listed below:
 }();
 
 // src/main.ts
-var LibcurlClient = class {
+var libbyClient = class {
   wisp;
   proxy;
   transport;
@@ -6396,22 +6396,22 @@ var LibcurlClient = class {
   }
   async init() {
     if (this.transport)
-      libcurl.transport = this.transport;
-    libcurl.set_websocket(this.wisp);
-    this.session = new libcurl.HTTPSession({
+      libby.transport = this.transport;
+    libby.set_websocket(this.wisp);
+    this.session = new libby.HTTPSession({
       proxy: this.proxy
     });
     if (this.connections)
       this.session.set_connections(...this.connections);
-    this.ready = libcurl.ready;
+    this.ready = libby.ready;
     if (this.ready) {
-      console.log("running libcurl.js v" + libcurl.version.lib);
+      console.log("running libby.js v" + libby.version.lib);
       return;
     }
     ;
     await new Promise((resolve, reject) => {
-      libcurl.onload = () => {
-        console.log("loaded libcurl.js v" + libcurl.version.lib);
+      libby.onload = () => {
+        console.log("loaded libby.js v" + libby.version.lib);
         this.ready = true;
         resolve(null);
       };
@@ -6444,7 +6444,7 @@ var LibcurlClient = class {
     };
   }
   connect(url, protocols, requestHeaders, onopen, onmessage, onclose, onerror) {
-    let socket = new libcurl.WebSocket(url.toString(), protocols, {
+    let socket = new libby.WebSocket(url.toString(), protocols, {
       headers: requestHeaders
     });
     socket.binaryType = "arraybuffer";
@@ -6471,5 +6471,5 @@ var LibcurlClient = class {
   }
 };
 export {
-  LibcurlClient as default
+  libbyClient as default
 };
