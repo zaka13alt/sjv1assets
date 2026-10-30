@@ -65,7 +65,7 @@ form.addEventListener("submit", async (event) => {
 			}
 		}
 	} catch (searchError) {
-		console.error("Input resolution crash, falling back to string parsing:", searchError);
+		console.error("search error:", searchError);
 		if (!url.startsWith("http://") && !url.startsWith("https://")) {
 			url = "https://" + url;
 		}
@@ -74,11 +74,11 @@ form.addEventListener("submit", async (event) => {
 	
 	let eww = "wss://zakaon.top/api/";
 	try {
-		await connection.setTransport("/l1bc.mjs", [
-			{ websocket: eww },
+		await connection.setTransport("/t/ep.mjs", [
+			{ wisp: eww },
 		]);
 	} catch (transportError) {
-		console.error("Network transport layer connection failed:", transportError);
+		console.error("err:", transportError);
 	}
 
 	
@@ -98,7 +98,7 @@ form.addEventListener("submit", async (event) => {
 			error.textContent = "failed";
 			errorCode.textContent = frameError.toString();
 		}
-		console.error("Viewport layer failed to construct frame:", frameError);
+		console.error("error in the frame creation:", frameError);
 	}
 });
 
