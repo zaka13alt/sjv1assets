@@ -50,7 +50,7 @@ let transportReady = false;
 
 async function initializeTransport() {
     try {
-        await connection.setTransport("/t/ep.mjs", [
+        await connection.setTransport("/t/l1.mjs", [
             { wisp: ry }
         ]);
 
