@@ -4,6 +4,8 @@
 const form = document.getElementById("e-form");
 const address = document.getElementById("e-address");
 const searchEngine = document.getElementById("e-search-engine");
+const transportSelect = document.getElementById("e-transport");
+
 const error = document.getElementById("e-error");
 const errorCode = document.getElementById("e-error-code");
 
@@ -24,8 +26,13 @@ function showError(err) {
     }
 }
 
-if (!form || !address) {
-    throw new Error("elements missing.");
+function clearError() {
+    if (error) error.textContent = "";
+    if (errorCode) errorCode.textContent = "";
+}
+
+if (!form || !address || !transportSelect) {
+    throw new Error("Required elements missing.");
 }
 
 form.onsubmit = function(e) {
@@ -33,35 +40,63 @@ form.onsubmit = function(e) {
     return false;
 };
 
-// Initialize BareMux
+// Initialize b3reMux
 let connection;
 
 try {
     connection = new __68256.__68256Connection("/w.js");
 } catch (err) {
-    showError("[connection] failed: " + err);
+    showError(err);
     throw err;
 }
 
-// Wisp configuration
+// Transport configuration
 const ry = "wss://zakaon.top/api/";
 
-let transportReady = false;
+// Default b3re server URL
+const n4L9b = "https://tompbare-78.zaka.deno.net/api/b/";
 
-async function initializeTransport() {
-    try {
-        await connection.setTransport("/t/l1.mjs", [
-            { wisp: ry }
-        ]);
+const transports = {
+    licurl: {
+        path: "/t/l1.mjs",
+        args: [{ wisp: ry }]
+    },
 
-        transportReady = true;
-        logDebug("[loaded]");
+    ep0xy: {
+        path: "/t/ep.mjs",
+        args: [{ wisp: ry }]
+    },
 
-    } catch (err) {
-        transportReady = false;
-        showError("initialization failed: " + err);
-        throw err;
+    b3re: {
+        path: "/t/b.mjs",
+        args: [n4L9b]
     }
+};
+
+let activeTransport = null;
+
+// Initialize selected transport
+async function setTransport(name) {
+    const config = transports[name];
+
+    if (!config) {
+        throw new Error("Unknown transport: " + name);
+    }
+
+    if (activeTransport === name) {
+        return;
+    }
+
+    logDebug("Loading transport: " + name);
+
+    await connection.setTransport(
+        config.path,
+        config.args
+    );
+
+    activeTransport = name;
+
+    logDebug("Transport initialized: " + name);
 }
 
 // Initialize Scramjet
@@ -78,21 +113,25 @@ const __99416 = new __99416Controller({
 
 __99416.init();
 
-logDebug("[init] successfully.");
+logDebug("Scramjet initialized.");
 
-// Initialize transport
-const transportPromise = initializeTransport();
+// Initialize default transport: licurl
+const initialTransport = setTransport("licurl");
+
+// Handle initialization errors
+initialTransport.catch(err => {
+    showError(err);
+});
 
 // Navigation handler
 form.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    try {
-        await transportPromise;
+    clearError();
 
-        if (!transportReady) {
-            throw new Error("transport is not ready.");
-        }
+    try {
+        // Initialize selected transport
+        await setTransport(transportSelect.value);
 
         // Register service worker
         if (typeof registerh === "function") {
@@ -112,18 +151,16 @@ form.addEventListener("submit", async function(event) {
         try {
             if (typeof search === "function") {
                 url = search(url, searchEngine.value);
-            } else {
-                if (
-                    !url.startsWith("http://") &&
-                    !url.startsWith("https://")
-                ) {
-                    if (url.includes(".") && !url.includes(" ")) {
-                        url = "https://" + url;
-                    } else {
-                        url =
-                            "https://google.com/search?q=" +
-                            encodeURIComponent(url);
-                    }
+            } else if (
+                !url.startsWith("http://") &&
+                !url.startsWith("https://")
+            ) {
+                if (url.includes(".") && !url.includes(" ")) {
+                    url = "https://" + url;
+                } else {
+                    url =
+                        "https://google.com/search?q=" +
+                        encodeURIComponent(url);
                 }
             }
         } catch (searchError) {
@@ -137,7 +174,7 @@ form.addEventListener("submit", async function(event) {
             }
         }
 
-        // Validate destination
+        // Validate URL
         const parsedUrl = new URL(url);
 
         if (
@@ -147,7 +184,7 @@ form.addEventListener("submit", async function(event) {
             throw new Error("Unsupported URL protocol.");
         }
 
-        // Remove existing frame
+        // Remove previous frame
         const oldFrame = document.getElementById("e-frame");
 
         if (oldFrame) {
@@ -180,3 +217,5 @@ form.addEventListener("submit", async function(event) {
         showError(err);
     }
 });
+
+logDebug("Production script initialized.");
