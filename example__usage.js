@@ -33,7 +33,7 @@ form.onsubmit = function(e) {
     return false;
 };
 
-
+// Initialize BareMux
 let connection;
 
 try {
@@ -43,7 +43,7 @@ try {
     throw err;
 }
 
-
+// Wisp configuration
 const ry = "wss://zakaon.top/api/";
 
 let transportReady = false;
@@ -64,7 +64,7 @@ async function initializeTransport() {
     }
 }
 
-
+// Initialize Scramjet
 const { __99416Controller } = __99416LoadController();
 
 const __99416 = new __99416Controller({
@@ -80,14 +80,14 @@ __99416.init();
 
 logDebug("[init] successfully.");
 
+// Initialize transport
 const transportPromise = initializeTransport();
 
-
+// Navigation handler
 form.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     try {
-        // 
         await transportPromise;
 
         if (!transportReady) {
