@@ -37,7 +37,7 @@ ${l}`}}if((0,n.U5)("rewriterLogs",r.base))for(let e of s.errors)console.error("o
             <html>
                 <head>
                     <meta charset="utf-8" />
-                    <title>__99416</title>
+                    <title>zaka</title>
                     <style>
                     :root {
                         --deep: #080602;
@@ -176,15 +176,15 @@ ${l}`}}if((0,n.U5)("rewriterLogs",r.base))for(let e of s.errors)console.error("o
                                 <p>If you're the administrator of <b id="hostname"></b>, try:</p>
                                     <ul>
                                     <li>Restarting your server</li>
-                                    <li>Updating __99416</li>
-                                    <li>Troubleshooting the error on the <a href="https://github.com/__55797/__99416" target="_blank">GitHub repository</a></li>
+                                    <li>Updating Zaka</li>
+                                    <li>Troubleshooting the error on the <a href="https://github.com/zaka13alt/sjv1assets" target="_blank">GitHub repository</a></li>
                                 </ul>
                             </div>
                         </div>
                         <br>
                         <button id="reload" class="primary">Reload</button>
                     </div>
-                    <p id="version-wrapper"><i>__99416 v<span id="version"></span> (build <span id="build"></span>)</i></p>
+                    <p id="version-wrapper"><i>Zaka v<span id="version"></span> (build <span id="build"></span>)</i></p>
                     <script src="${"data:application/javascript,"+encodeURIComponent(r)}"></script>
                 </body>
             </html>
