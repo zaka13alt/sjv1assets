@@ -63,7 +63,7 @@ const transports = {
     },
 
     ep0xy: {
-        path: "/t/ep.mjs",
+        path: "/t/ep.js",
         args: [{ wisp: ry }]
     },
 
